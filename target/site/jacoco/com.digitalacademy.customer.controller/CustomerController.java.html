@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CustomerController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">hello-spring-boot</a> &gt; <a href="index.source.html" class="el_package">com.digitalacademy.customer.controller</a> &gt; <span class="el_source">CustomerController.java</span></div><h1>CustomerController.java</h1><pre class="source lang-java linenums">package com.digitalacademy.customer.controller;
+
+import com.digitalacademy.customer.model.CustomerModel;
+import com.digitalacademy.customer.service.CustomerService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.util.List;
+import java.util.Optional;
+
+@RestController
+@RequestMapping(path = &quot;/customer&quot;)
+public class CustomerController {
+    //Member Variable
+//    @Autowired
+//    CustomerService customerService;
+
+    //Constructor Injection
+    private CustomerService customerService;
+
+    @Autowired
+<span class="fc" id="L25">    public CustomerController(CustomerService customerService) {</span>
+<span class="fc" id="L26">        this.customerService = customerService;</span>
+<span class="fc" id="L27">    }</span>
+
+    @GetMapping(&quot;/list&quot;)
+    public List&lt;CustomerModel&gt; customerList (){
+<span class="fc" id="L31">        return customerService.getCustomerList();</span>
+    }
+
+    @GetMapping(&quot;{id}&quot;)
+    public ResponseEntity&lt;?&gt; getCustomerById(@PathVariable Long id){
+<span class="fc" id="L36">        CustomerModel customer = customerService.getCustomerById(id);</span>
+<span class="fc bfc" id="L37" title="All 2 branches covered.">        if(customer != null){</span>
+<span class="fc" id="L38">            return ResponseEntity.ok(customer);</span>
+        }
+        else{
+<span class="fc" id="L41">            return  ResponseEntity.notFound().build();</span>
+        }
+    }
+
+    @GetMapping(params = &quot;firstName&quot;)
+    public ResponseEntity&lt;?&gt; getCustomerByFirstName(@RequestParam(value = &quot;firstName&quot;) String firstName) {
+<span class="fc" id="L47">        List&lt;CustomerModel&gt; customer = customerService.getCustomerByFirstName(firstName);</span>
+<span class="pc bpc" id="L48" title="1 of 4 branches missed.">        return customer != null &amp;&amp; !customer.isEmpty() ? ResponseEntity.ok(customer)</span>
+<span class="fc" id="L49">                : ResponseEntity.notFound().build();</span>
+
+//        if(customer != null &amp;&amp; customer.isEmpty()){
+//            return ResponseEntity.ok(customer);
+//        }
+//        else{
+//            return  ResponseEntity.notFound().build();
+//        }
+    }
+
+//    @GetMapping(&quot;/name/{firstName}&quot;)
+//    public ResponseEntity&lt;?&gt; getCustomerByFirstName(@PathVariable String firstName){
+//        List&lt;CustomerModel&gt; customer = customerService.getCustomerByFirstName(firstName);
+//        if(customer != null){
+//            return ResponseEntity.ok(customer);
+//        }
+//        else{
+//            return  ResponseEntity.notFound().build();
+//        }
+//    }
+
+    @RequestMapping(method = RequestMethod.POST)
+    public ResponseEntity&lt;?&gt; postCustomer(@Valid @RequestBody CustomerModel body){
+<span class="fc" id="L72">        CustomerModel customer = customerService.createCustomer(body);</span>
+<span class="fc" id="L73">        return ResponseEntity.status(HttpStatus.CREATED).body(customer);</span>
+    }
+
+    @PutMapping(&quot;/{id}&quot;)
+    public ResponseEntity&lt;?&gt; putCustomer(@PathVariable Long id, @Valid @RequestBody CustomerModel body){
+<span class="nc" id="L78">        body.setId(id);</span>
+<span class="nc" id="L79">        CustomerModel customer = customerService.updateCustomer(id, body);</span>
+<span class="nc bnc" id="L80" title="All 2 branches missed.">        return customer != null ? ResponseEntity.ok(customer)</span>
+<span class="nc" id="L81">                : ResponseEntity.notFound().build();</span>
+    }
+
+    @DeleteMapping(&quot;/{id}&quot;)
+    public ResponseEntity&lt;?&gt; deleteCustomer(@PathVariable Long id){
+<span class="nc bnc" id="L86" title="All 2 branches missed.">        return customerService.deleteCustomer(id) ? ResponseEntity.ok().build()</span>
+<span class="nc" id="L87">                : ResponseEntity.notFound().build();</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

@@ -1,0 +1,5 @@
+com/digitalacademy/customer/util/CalculatorTest.class
+com/digitalacademy/customer/service/CustomerServiceTest.class
+com/digitalacademy/customer/util/Person.class
+com/digitalacademy/customer/controller/CustomerControllerTest.class
+com/digitalacademy/customer/support/CustomerSupportTest.class
